@@ -5,51 +5,62 @@
  *      Author: pnookala
  */
 
+#define _GNU_SOURCE
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sched.h>
 
 #include "xtask_api.h"
 #include "basicqueue.h"
 #include "worker.h"
 
-#include <assert.h>
-
 struct mproc_state *mps;
+//static pthread_barrier_t barrier;
 
 void xtask_setup(int queue_size, int workers)
 {
-	assert(queue_size > 0);
-	assert(workers > 0);
-
 	int *kill_master = (int *) malloc(sizeof(int));
 	*kill_master = 0;
 
 	mps = (struct mproc_state *) malloc(sizeof(struct mproc_state));
-	mps->incoming = create_queue(queue_size);
-	mps->results = create_queue(queue_size);
+	//mps->incoming = CREATEQUEUE(queue_size);
+	//mps->results = CREATEQUEUE(queue_size);
+	INITQUEUES(queue_size);
 	mps->kill_master = kill_master;
 	mps->workers = workers;
 	mps->worker_threads = (pthread_t *) malloc(sizeof(pthread_t) * workers);
 
-	int t;
-	for (t = 0; t < workers; t++)
+	cpu_set_t cpuset;
+
+   CPU_ZERO(&cpuset);
+   for (int j = 0; j < NUM_CPUS; j++)
+	   CPU_SET(j, &cpuset);
+
+   pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
+
+   //pthread_barrier_init(&barrier, NULL, workers);
+
+	for (int t = 0; t < workers; t++)
+	{
 		pthread_create(&mps->worker_threads[t], NULL, worker_handler, (void *)mps);
+	}
+
+	//printf("created threads\n");
 }
 
 void xtask_cleanup()
 {
-	*(mps->kill_master) = 1;
+	//TODO: We need to wait till input queue is empty before we kill the threads, however there is a timing issue here, processing might not be complete.
+	//while(!CIRCLEQ_EMPTY(&head));
+	//*(mps->kill_master) = 1;
 
-	int t;
-	for (t = 0; t < mps->workers; t++)
-		pthread_cancel(mps->worker_threads[t]);
-
-	for (t = 0; t < mps->workers; t++)
+	for (int t = 0; t < mps->workers; t++)
 		pthread_join(mps->worker_threads[t], NULL);
 
-	dispose_queue(mps->incoming);
-	dispose_queue(mps->results);
+	//dispose_queue(mps->incoming);
+	//dispose_queue(mps->results);
 
 	free(mps->worker_threads);
 	free(mps->kill_master);
@@ -58,27 +69,28 @@ void xtask_cleanup()
 
 void xtask_push(int type, int threads, int id, void *params)
 {
-	struct task_desc *task = (struct task_desc *) malloc(sizeof(struct task_desc));
-	task->task_id = id;
-	task->task_type = type;
-	task->num_threads = threads;
-	task->params = params;
+//	struct task_desc *task = (struct task_desc *) malloc(sizeof(struct task_desc));
+//	task->task_id = id;
+//	task->task_type = type;
+//	task->num_threads = threads;
+//	task->params = params;
 
-	enqueue(task, mps->incoming);
+	ENQUEUE(id);
 }
 
 void xtask_poll(int *id, void **params)
 {
-	struct task_desc *task;
+	//struct task_desc *task;
 
-	task = dequeue(mps->results);
+	int i = DEQUEUE_RESULT();
 
-	assert(task != NULL);
+	//assert(task != NULL);
 
 	/* pass the pointers with the results */
-	*id = task->task_id;
-	*params = task->params;
+	//*id = task->task_id;
+	//*params = task->params;
+	*id = i;
 
 	/* cleanup task */
-	free(task);
+	//free(task);
 }

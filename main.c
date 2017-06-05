@@ -5,8 +5,6 @@
  *      Author: pnookala
  */
 
-#define _GNU_SOURCE
-
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,8 +17,30 @@
 #include <time.h>
 #include "worker.h"
 #include "basicqueue.h"
-#include "squeue.h"
+#include "xtask_api.h"
 
-#define QUEUE_SIZE 8,388,608 //2^23   // Define maximum length of the queue
+int main(void)
+{
+	int *id = (int *) malloc(sizeof(int));
+	//void *params;
+
+	*id = -1;
+
+	xtask_setup(QUEUE_SIZE, WORKERS);
+
+	for(int i=0; i<NUM_SAMPLES; i++)
+	{
+		xtask_push(1,1, i+1, NULL);
+	}
+
+	//xtask_poll(id,&params);
+
+	xtask_cleanup();
+
+	//while(1);
+	free(id);
+
+	return(0);
+}
 
 
