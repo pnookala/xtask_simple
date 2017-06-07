@@ -4,20 +4,20 @@
  *  Created on: Jun 2, 2017
  *      Author: pnookala
  */
+#ifndef WORKER_H_
+#define WORKER_H_
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <sched.h>
 #include "basicqueue.h"
 
-#ifndef WORKER_H_
-#define WORKER_H_
-
-#define NUM_SAMPLES 12//8388608 //2^23
+#define NUM_SAMPLES 16//8388608 //2^23
 #define QUEUE_SIZE NUM_SAMPLES   // Define maximum length of the queue
-#define WORKERS  2
+#define WORKERS 2
 #define NUM_CPUS 2
 
 #define INITQUEUES(size) InitBasicQueue(size)
@@ -32,6 +32,7 @@ struct mproc_state {
 	pthread_t *worker_threads;
 	int *kill_master;
 	int workers;
+	pthread_barrier_t barrier;
 };
 
 //static pthread_barrier_t barrier;

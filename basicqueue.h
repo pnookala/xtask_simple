@@ -16,8 +16,8 @@
 CIRCLEQ_HEAD(circleq, basicentry) head;
 struct circleq *headp;              /* Circular queue head. */
 struct basicentry {
-  CIRCLEQ_ENTRY(basicentry) entries;   /* Circular queue. */
-  int elem;
+	CIRCLEQ_ENTRY(basicentry) entries;   /* Circular queue. */
+	int elem;
 };
 
 CIRCLEQ_HEAD(circleq_r, basicentry) rq_head;

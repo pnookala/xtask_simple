@@ -22,7 +22,7 @@
 int main(void)
 {
 	int *id = (int *) malloc(sizeof(int));
-	//void *params;
+	void *params;
 
 	*id = -1;
 
@@ -33,7 +33,11 @@ int main(void)
 		xtask_push(1,1, i+1, NULL);
 	}
 
-	//xtask_poll(id,&params);
+	for(int i=0; i<NUM_SAMPLES; i++)
+	{
+		xtask_poll(id,&params);
+		printf("Result : %d \n", *id);
+	}
 
 	xtask_cleanup();
 

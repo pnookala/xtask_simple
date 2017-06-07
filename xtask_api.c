@@ -5,8 +5,6 @@
  *      Author: pnookala
  */
 
-#define _GNU_SOURCE
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -34,13 +32,13 @@ void xtask_setup(int queue_size, int workers)
 
 	cpu_set_t cpuset;
 
-   CPU_ZERO(&cpuset);
-   for (int j = 0; j < NUM_CPUS; j++)
-	   CPU_SET(j, &cpuset);
+	CPU_ZERO(&cpuset);
+	for (int j = 0; j < NUM_CPUS; j++)
+		CPU_SET(j, &cpuset);
 
-   pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
+	pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
 
-   //pthread_barrier_init(&barrier, NULL, workers);
+	pthread_barrier_init(&mps->barrier, NULL, workers);
 
 	for (int t = 0; t < workers; t++)
 	{
@@ -69,11 +67,11 @@ void xtask_cleanup()
 
 void xtask_push(int type, int threads, int id, void *params)
 {
-//	struct task_desc *task = (struct task_desc *) malloc(sizeof(struct task_desc));
-//	task->task_id = id;
-//	task->task_type = type;
-//	task->num_threads = threads;
-//	task->params = params;
+	//	struct task_desc *task = (struct task_desc *) malloc(sizeof(struct task_desc));
+	//	task->task_id = id;
+	//	task->task_type = type;
+	//	task->num_threads = threads;
+	//	task->params = params;
 
 	ENQUEUE(id);
 }
