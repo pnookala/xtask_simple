@@ -12,13 +12,13 @@
 typedef unsigned long long xtask_sem_t;
 
 // Structure for task-specific data. Notably does not contain the executable.
-struct xtask_task_spec {
+typedef struct {
 	int nwaits;
 	xtask_sem_t *waits;
 	int nsignals;
 	xtask_sem_t *signals;
 	void *data;
-};
+} xtask_task_spec;
 
 // Setup the XTask system. Should only be called once.
 void xtask_setup(int queue_size, int workers);
