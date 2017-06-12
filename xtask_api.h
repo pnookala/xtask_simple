@@ -17,7 +17,7 @@ typedef struct _xtask_aftern_internal* xtask_aftern_t;
 typedef struct {
 	void (*task)(void* state, void* data, int is_nth);
 	void* data;
-	xtask_after_n_t aftern;
+	xtask_aftern_t aftern;
 } xtask_task_t;
 
 // Setup the XTask system. Should only be called once.
