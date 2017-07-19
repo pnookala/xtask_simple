@@ -93,8 +93,8 @@ int main(void) {
 
 #ifdef THROUGHPUT
     fprintf(rfp, "QueueType NumSamples Throughput NumThreads\n");
-    fprintf(rfp, "%d %d %lf %d\n", type, NUM_SAMPLES, mps->throughput, WORKERS);
-    printf("%d %d %lf %d\n", type, NUM_SAMPLES, mps->throughput, WORKERS);
+    fprintf(rfp, "%d %d %lf %d\n", QUEUE_TYPE, NUM_SAMPLES, mps->throughput, WORKERS);
+    printf("%d %d %lf %d\n", QUEUE_TYPE, NUM_SAMPLES, mps->throughput, WORKERS);
 #endif
 
     //while(1);
