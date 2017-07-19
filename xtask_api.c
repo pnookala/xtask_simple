@@ -14,9 +14,6 @@
 #include "basicqueue.h"
 #include "worker.h"
 
-struct mproc_state *mps;
-//static pthread_barrier_t barrier;
-
 void xtask_setup(int queue_size, int workers)
 {
 	int *kill_master = (int *) malloc(sizeof(int));
@@ -29,20 +26,16 @@ void xtask_setup(int queue_size, int workers)
 	mps->kill_master = kill_master;
 	mps->workers = workers;
 	mps->worker_threads = (pthread_t *) malloc(sizeof(pthread_t) * workers);
-
-	cpu_set_t cpuset;
-
-	CPU_ZERO(&cpuset);
-	for (int j = 0; j < NUM_CPUS; j++)
-		CPU_SET(j, &cpuset);
-
-	pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
-
+        mps->timestamps = (ticks *) malloc(sizeof (ticks) * NUM_SAMPLES);
+        
 	pthread_barrier_init(&mps->barrier, NULL, workers);
 
 	for (int t = 0; t < workers; t++)
 	{
-		pthread_create(&mps->worker_threads[t], NULL, worker_handler, (void *)mps);
+            struct thread_local_data* data = malloc(sizeof(struct thread_local_data*));
+            data->mps = mps;
+            data->cpuID = (t % NUM_CPUS);
+		pthread_create(&mps->worker_threads[t], NULL, worker_handler, (void *)data);
 	}
 
 	//printf("created threads\n");

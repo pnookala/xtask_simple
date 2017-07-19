@@ -9,7 +9,7 @@ void InitBasicQueue(int size)
 
 void BasicEnqueue(int i)
 {
-	struct basicentry* n = malloc(sizeof(struct basicentry));
+	struct basicentry* n = (struct basicentry*) malloc(sizeof(struct basicentry));
 	n->elem = i;
 	pthread_mutex_lock(&lock);
 	CIRCLEQ_INSERT_TAIL(&head, n, entries);
@@ -41,7 +41,7 @@ int BasicDequeue()
 
 void BasicEnqueue_rq(int i)
 {
-	struct basicentry* n = malloc(sizeof(struct basicentry));
+	struct basicentry* n = (struct basicentry*) malloc(sizeof(struct basicentry));
 	n->elem = i;
 	pthread_mutex_lock(&lock);
 	CIRCLEQ_INSERT_TAIL(&rq_head, n, entries);

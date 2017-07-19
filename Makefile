@@ -1,4 +1,4 @@
-CC = gcc -g
+CC = gcc -g -DLATENCY
 #CC = icc -mmic	#use this for to make an executable for Phi
 CFLAGS = -std=c99 -D_GNU_SOURCE -O2 -Wall -Wpedantic -Werror #-DVERBOSE
 OBJECTS = basicqueue.o xtask_api.o worker.o main.o
