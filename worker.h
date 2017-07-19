@@ -17,7 +17,8 @@
 
 #define NUM_SAMPLES 16//8388608 //2^23
 #define QUEUE_SIZE NUM_SAMPLES   // Define maximum length of the queue
-#define WORKERS 2
+#define WORKERS 6
+
 #define NUM_CPUS 2
 #define QUEUE_TYPE 1
 
