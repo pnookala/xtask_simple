@@ -15,12 +15,11 @@
 #include <sched.h>
 #include "basicqueue.h"
 
-#define NUM_SAMPLES 8//262144 //2^23
+#define NUM_SAMPLES 8388608 //2^23
 #define QUEUE_SIZE NUM_SAMPLES   // Define maximum length of the queue
 #define WORKERS 1
-
 #define NUM_CPUS 24
-#define QUEUE_TYPE 1
+#define QUEUE_TYPE 3
 
 #define INITQUEUES(size) InitBasicQueue(size)
 #define ENQUEUE(data) BasicEnqueue(data)

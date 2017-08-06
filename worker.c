@@ -56,7 +56,7 @@ void *worker_handler(void *data) {
 #endif
     pthread_barrier_wait(&mps->barrier);
 #ifdef THROUGHPUT
-    double diff = 0.0;
+//    double diff = 0.0;
     struct timespec tstart, tend;
     clock_gettime(CLOCK_MONOTONIC, &tstart);
 #endif
