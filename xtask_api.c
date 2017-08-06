@@ -58,29 +58,28 @@ void xtask_cleanup()
 	free(mps);
 }
 
-void xtask_push(int type, int threads, int id, void *params)
+void xtask_push(struct task_desc* task)
 {
-	//	struct task_desc *task = (struct task_desc *) malloc(sizeof(struct task_desc));
-	//	task->task_id = id;
-	//	task->task_type = type;
-	//	task->num_threads = threads;
-	//	task->params = params;
+//        struct task_desc *task = (struct task_desc *) malloc(sizeof(struct task_desc));
+//        task->task_id = id;
+//        task->task_type = type;
+//        task->num_threads = threads;
+//        task->params = params;
 
-	ENQUEUE(id);
+	ENQUEUE(task);
 }
 
-void xtask_poll(int *id, void **params)
+void xtask_poll(void *task)
 {
-	//struct task_desc *task;
 
-	int i = DEQUEUE_RESULT();
+	task = DEQUEUE_RESULT();
 
 	//assert(task != NULL);
 
 	/* pass the pointers with the results */
 	//*id = task->task_id;
 	//*params = task->params;
-	*id = i;
+	//*id = i;
 
 	/* cleanup task */
 	//free(task);

@@ -7,13 +7,14 @@
 
 #ifndef XTASK_API_H_
 #define XTASK_API_H_
+#include "worker.h"
 
 struct mproc_state *mps;
 
 void xtask_setup(int queue_size, int workers);
 void xtask_cleanup();
 
-void xtask_push(int type, int threads, int id, void *params);
-void xtask_poll(int *id, void **params);
+void xtask_push(struct task_desc* task);
+void xtask_poll(void* task);
 
 #endif /* XTASK_API_H_ */

@@ -41,7 +41,10 @@ int main(void) {
     xtask_setup(QUEUE_SIZE, WORKERS);
 
     for (int i = 0; i < NUM_SAMPLES; i++) {
-        xtask_push(1, 1, i + 1, NULL);
+        struct task_desc* task = (struct task_desc*)malloc(sizeof(struct task_desc));
+        task->task_type = 1;
+        task->task_id = i+1;
+        xtask_push(task);
     }
 
 //    for (int i = 0; i < NUM_SAMPLES; i++) {
@@ -93,7 +96,7 @@ int main(void) {
 
 #ifdef THROUGHPUT
     fprintf(rfp, "QueueType NumSamples Throughput NumThreads\n");
-    fprintf(rfp, "%d %d %lf %d\n", type, NUM_SAMPLES, mps->throughput, WORKERS);
+    fprintf(rfp, "%d %d %lf %fd\n", type, NUM_SAMPLES, mps->throughput, WORKERS);
     printf("%d %d %lf %d\n", type, NUM_SAMPLES, mps->throughput, WORKERS);
 #endif
 

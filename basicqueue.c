@@ -7,19 +7,19 @@ void InitBasicQueue(int size)
 	pthread_mutex_init(&lock, NULL);
 }
 
-void BasicEnqueue(int i)
+void BasicEnqueue(void* task)
 {
 	struct basicentry* n = (struct basicentry*) malloc(sizeof(struct basicentry));
-	n->elem = i;
+	n->elem = task;
 	pthread_mutex_lock(&lock);
 	CIRCLEQ_INSERT_TAIL(&head, n, entries);
 	pthread_mutex_unlock(&lock);
 #ifdef VERBOSE
-	printf("Added %d to the queue\n", n->elem);
+	printf("Added %d to the queue\n", ((struct task_desc*)(n->elem))->task_id);
 #endif
 }
 
-int BasicDequeue()
+void* BasicDequeue()
 {
 	// Remove a number from the queue
 	struct basicentry *n;
@@ -32,26 +32,26 @@ int BasicDequeue()
 		pthread_mutex_unlock(&lock);
 		sched_yield();
 	}
-	while(n->elem == 0);
+	while(!n->elem);
 #ifdef VERBOSE
-	printf("Removed %d from the queue\n", n->elem);
+	printf("Removed %d from the queue\n", ((struct task_desc*)(n->elem))->task_id);
 #endif
 	return n->elem;
 }
 
-void BasicEnqueue_rq(int i)
+void BasicEnqueue_rq(void* task)
 {
 	struct basicentry* n = (struct basicentry*) malloc(sizeof(struct basicentry));
-	n->elem = i;
+	n->elem = task;
 	pthread_mutex_lock(&lock);
 	CIRCLEQ_INSERT_TAIL(&rq_head, n, entries);
 	pthread_mutex_unlock(&lock);
 #ifdef VERBOSE
-	printf("Added %d to the result queue\n", n->elem);
+	printf("Added %d to the result queue\n", ((struct task_desc*)(n->elem))->task_id);
 #endif
 }
 
-int BasicDequeue_rq()
+void* BasicDequeue_rq()
 {
 	// Remove a number from the queue
 	struct basicentry *n;
@@ -63,9 +63,9 @@ int BasicDequeue_rq()
 		pthread_mutex_unlock(&lock);
 		sched_yield();
 	}
-	while(n->elem == 0);
+	while(!n->elem);
 #ifdef VERBOSE
-	printf("Removed %d from the result queue\n", n->elem);
+	printf("Removed %d from the result queue\n", ((struct task_desc*)(n->elem))->task_id);
 #endif
 	return n->elem;
 }

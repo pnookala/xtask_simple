@@ -13,6 +13,20 @@
 #include "worker.h"
 
 struct task_desc *execute_task(struct task_desc *task) {
+    if(task)
+    {
+        switch(task->task_type)
+        {
+            case 0:
+                sleep(0);
+                break;
+            case 1:
+                __asm__ __volatile__("nop;");
+                break;
+            default:
+                break;
+        }
+    }
     sleep(0);
 
     return 0;
@@ -51,9 +65,9 @@ void *worker_handler(void *data) {
 #ifdef LATENCY
         start_tick = getticks();
 #endif
-        int i = DEQUEUE();
+        task = DEQUEUE();
         execute_task(task);
-        ENQUEUE_RESULT(i);
+        ENQUEUE_RESULT(task);
 #ifdef LATENCY
         end_tick = getticks();
         timestamp[count] = end_tick - start_tick;
