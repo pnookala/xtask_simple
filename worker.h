@@ -19,9 +19,9 @@
 //
 //static int WORKERS;
 //
-//#define NUM_SAMPLES 16//262144//8388608 //2^23
+//#define NUM_SAMPLES 262144//8388608 //2^23
 //#define QUEUE_SIZE NUM_SAMPLES   // Define maximum length of the queue
-//#define NUM_CPUS 2
+//#define NUM_CPUS 24
 //
 //#define INITQUEUES(size) InitBasicQueue(size)
 //#define ENQUEUE(data) BasicEnqueue(data)
