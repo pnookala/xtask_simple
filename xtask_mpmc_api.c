@@ -86,6 +86,7 @@ void *workermultiple_handler(void * data) {
     memcpy(mps->dequeuetimestamps + mps->totaldequeuesamples, dequeuetimestamp, NUM_SAMPLES_PER_THREAD * sizeof (ticks));
     mps->totaldequeuesamples += NUM_SAMPLES_PER_THREAD;
     pthread_mutex_unlock(&lock);
+    free(dequeuetimestamp);
 #endif
 #ifdef THROUGHPUT
     clock_gettime(CLOCK_MONOTONIC, &tend);
@@ -150,6 +151,8 @@ void *workermultiple_handler(void * data) {
     memcpy(mps->enqueuetimestamps + mps->totalenqueuesamples, enqueuetimestamp, NUM_SAMPLES_PER_THREAD * sizeof (ticks));
     mps->totalenqueuesamples += NUM_SAMPLES_PER_THREAD;
     pthread_mutex_unlock(&lock);
+    
+    free(enqueuetimestamp);
 #endif
 #ifdef THROUGHPUT
     clock_gettime(CLOCK_MONOTONIC, &tend);

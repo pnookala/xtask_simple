@@ -116,6 +116,7 @@ void *worker_handler(void *data) {
         memcpy(mps->timestamps + mps->totalsamples, timestamp, NUM_SAMPLES_PER_THREAD * sizeof (ticks));
         mps->totalsamples += NUM_SAMPLES_PER_THREAD;
         pthread_mutex_unlock(&lock);
+        free(timestamp);
 #endif
 #ifdef THROUGHPUT
     clock_gettime(CLOCK_MONOTONIC, &tend);

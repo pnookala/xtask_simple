@@ -1,5 +1,5 @@
 CC = gcc -g
-#CC = icc -mmic	#use this for to make an executable for Phi
+#CC = icc -mmic	-DPHI #use this for to make an executable for Phi
 CFLAGS = -std=c99 -D_GNU_SOURCE -O2 -Wall -Wpedantic #-DVERBOSE
 OBJECTS = basicqueue.o xtask_api.o squeuemultiple.o xtask_mpmc_api.o main.o
 LDFLAGS = -lpthread
