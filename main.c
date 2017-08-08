@@ -156,7 +156,7 @@ FILE *rfp = fopen(fileName1, "a");
 #ifdef spsctest
         ticks totalTicks = 0;
         for (int i = 0; i < mps->totalsamples; i++) {
-            printf("numsamples %ld i %d\n", mps->totalsamples, i);
+            //printf("numsamples %ld i %d\n", mps->totalsamples, i);
             totalTicks += mps->timestamps[i];
         }
 
