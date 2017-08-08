@@ -28,7 +28,6 @@ struct task_desc *execute_task(struct task_desc *task) {
                 sleep(0);
                 break;
             case 1:
-                printf("executing nop\n");
                 __asm__ __volatile__("nop;");
                 break;
             default:

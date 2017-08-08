@@ -42,7 +42,7 @@ void InitQueues(int size, int numQueues)
 #endif
 	queues = (struct theQueue **) malloc(sizeof(struct theQueue*) * numQueues);
         resultQueue = (struct theQueue*)malloc(sizeof(struct theQueue));
-        resultQueue->data = malloc(sizeof(struct task_desc*) * QUEUE_SIZE);
+        resultQueue->data = malloc(sizeof(struct task_desc*) * size);
         
 	for(int i=0; i<numQueues; i++)
 	{
