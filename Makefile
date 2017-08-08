@@ -5,11 +5,11 @@ OBJECTS = basicqueue.o xtask_api.o squeuemultiple.o xtask_mpmc_api.o main.o
 LDFLAGS = -lpthread
 
 all:
-	$(CC) $(CFLAGS) -c -DLATENCY -Dspsctest basicqueue.c
-	$(CC) $(CFLAGS) -c -DLATENCY -Dspsctest xtask_api.c
-	$(CC) $(CFLAGS) -c -DLATENCY -Dspsctest squeuemultiple.c
-	$(CC) $(CFLAGS) -c -DLATENCY -Dspsctest xtask_mpmc_api.c
-	$(CC) $(CFLAGS) -c -DLATENCY -Dspsctest main.c
+	$(CC) $(CFLAGS) -c -DLATENCY -Dmpmctest basicqueue.c
+	$(CC) $(CFLAGS) -c -DLATENCY -Dmpmctest xtask_api.c
+	$(CC) $(CFLAGS) -c -DLATENCY -Dmpmctest squeuemultiple.c
+	$(CC) $(CFLAGS) -c -DLATENCY -Dmpmctest xtask_mpmc_api.c
+	$(CC) $(CFLAGS) -c -DLATENCY -Dmpmctest main.c
 	$(CC) $(CFLAGS) $(OBJECTS) $(LDFLAGS) -DLATENCY -Dspsctest -o main
 	
 allmpmc:

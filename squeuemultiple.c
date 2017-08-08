@@ -13,7 +13,7 @@
 
 #ifdef mpmctest
 
-int QUEUE_SIZE;
+static int QUEUE_SIZE;
 
 static inline void spinlock(volatile int *lock)
 {

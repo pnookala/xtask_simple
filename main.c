@@ -102,21 +102,20 @@ int main(int argc, char **argv) {
         printf("Thread list count: %d\n", threadCount);
         printf("Output files: %s\n", fileName1);
     }
-    
-    #ifdef LATENCY  
-FILE *rfp = fopen(fileName1, "a");
-        //fprintf(rfp, "QueueType NumSamples AverageDequeueCycles MinDequeueCycles MaxDequeueCycles NumThreads\n");
+
+#ifdef LATENCY  
+    FILE *rfp = fopen(fileName1, "a");
+    //fprintf(rfp, "QueueType NumSamples AverageDequeueCycles MinDequeueCycles MaxDequeueCycles NumThreads\n");
 #endif
 #ifdef RAW
-        fprintf(rfp, "QueueType NumSamples Cycles NumThreads\n");
+    fprintf(rfp, "QueueType NumSamples Cycles NumThreads\n");
 #endif
 #ifdef THROUGHPUT
-        FILE *rfp = fopen(fileName1, "a");
-        //fprintf(rfp, "QueueType NumSamples Throughput NumThreads\n");
+    FILE *rfp = fopen(fileName1, "a");
+    //fprintf(rfp, "QueueType NumSamples Throughput NumThreads\n");
 #endif 
 
-    for (int k = 0; k < threadCount; k++) 
-    {
+    for (int k = 0; k < threadCount; k++) {
         int workers = 0;
         workers = threads[k];
 
@@ -146,7 +145,7 @@ FILE *rfp = fopen(fileName1, "a");
         xtask_cleanup();
 
 #ifdef LATENCY
-        
+
 #ifdef mpmctest
         SortTicks(mps->enqueuetimestamps, mps->totalenqueuesamples);
         SortTicks(mps->dequeuetimestamps, mps->totaldequeuesamples);
@@ -167,11 +166,20 @@ FILE *rfp = fopen(fileName1, "a");
         ticks tickMin = mps->timestamps[0];
         ticks tickMax = mps->timestamps[mps->totalsamples - 1];
 
+        ticks tickMedian = 0;
+
+        if (mps->totalsamples % 2 == 0) {
+            // if there is an even number of elements, return mean of the two elements in the middle
+            tickMedian = ((mps->timestamps[(mps->totalsamples / 2)] + mps->timestamps[(mps->totalsamples / 2) - 1]) / 2.0);
+        } else {
+            // else return the element in the middle
+            tickMedian = mps->timestamps[(mps->totalsamples / 2)];
+        }
         //compute average
         double tickAverage = (totalTicks / mps->totalsamples);
 
-        fprintf(rfp, "%d %ld %lf %ld %ld %d \n", QUEUE_TYPE, mps->totalsamples, tickAverage, tickMin, tickMax, workers);
-        printf("%d %ld %lf %ld %ld %d \n", QUEUE_TYPE, mps->totalsamples, tickAverage, tickMin, tickMax, workers);
+        fprintf(rfp, "%d %ld %lf %ld %ld %ld %d \n", QUEUE_TYPE, mps->totalsamples, tickAverage, tickMin, tickMax, tickMedian, workers);
+        printf("%d %ld %lf %ld %ld %ld %d \n", QUEUE_TYPE, mps->totalsamples, tickAverage, tickMin, tickMax, tickMedian, workers);
 #ifdef RAW
         int i = 0;
         while (i < NUM_SAMPLES) {
@@ -195,18 +203,28 @@ FILE *rfp = fopen(fileName1, "a");
         ticks tickDequeueMin = mps->dequeuetimestamps[0];
         ticks tickDequeueMax = mps->dequeuetimestamps[mps->totaldequeuesamples - 1];
 
+        ticks tickMedian = 0;
+
+        if (mps->totaldequeuesamples % 2 == 0) {
+            // if there is an even number of elements, return mean of the two elements in the middle
+            tickMedian = ((mps->dequeuetimestamps[(mps->totaldequeuesamples / 2)] + mps->dequeuetimestamps[(mps->totaldequeuesamples / 2) - 1]) / 2.0);
+        } else {
+            // else return the element in the middle
+            tickMedian = mps->dequeuetimestamps[(mps->totaldequeuesamples / 2)];
+        }
+
         //compute average
         //double tickEnqueueAverage = (totalEnqueueTicks / NUM_SAMPLES);
         double tickDequeueAverage = (totalDequeueTicks / mps->totaldequeuesamples);
 
-        fprintf(rfp, "%d %ld %lf %ld %ld %d \n", QUEUE_TYPE, mps->totaldequeuesamples, tickDequeueAverage, tickDequeueMin, tickDequeueMax, workers);
-        printf("%d %ld %lf %ld %ld %d \n", QUEUE_TYPE, mps->totaldequeuesamples, tickDequeueAverage, tickDequeueMin, tickDequeueMax, workers);
+        fprintf(rfp, "%d %ld %lf %ld %ld %ld %d \n", QUEUE_TYPE, mps->totaldequeuesamples, tickDequeueAverage, tickDequeueMin, tickDequeueMax, tickMedian, workers);
+        printf("%d %ld %lf %ld %ld %ld %d \n", QUEUE_TYPE, mps->totaldequeuesamples, tickDequeueAverage, tickDequeueMin, tickDequeueMax, tickMedian, workers);
 #ifdef RAW
         int i = 0;
         while (i < NUM_SAMPLES) {
             fprintf(rfp, "%d %ld %ld %d\n", QUEUE_TYPE, mps->totaldequeuesamples, mps->dequeuetimestamps[i], workers);
 #ifdef VERBOSE
-            printf("%d %ld %ld %d\n", QUEUE_TYPE, mps->totaldequeuesamples,  mps->dequeuetimestamps[i], workers);
+            printf("%d %ld %ld %d\n", QUEUE_TYPE, mps->totaldequeuesamples, mps->dequeuetimestamps[i], workers);
 #endif
             i++;
         }
