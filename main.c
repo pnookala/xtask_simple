@@ -121,18 +121,18 @@ int main(int argc, char **argv) {
 
         xtask_setup(NUM_SAMPLES, workers);
 
-        for (int i = 0; i < NUM_SAMPLES; i++) {
-            struct task_desc* task = (struct task_desc*) malloc(sizeof (struct task_desc));
-            task->task_type = 1;
-            task->task_id = i + 1;
-#ifdef mpmctest
-            //printf("enqueue ID %d\n", (i%workers));
-            xtask_push(task, (i % workers));
-#endif
-#ifdef spsctest
-            xtask_push(task);
-#endif
-        }
+//        for (int i = 0; i < NUM_SAMPLES; i++) {
+//            struct task_desc* task = (struct task_desc*) malloc(sizeof (struct task_desc));
+//            task->task_type = 1;
+//            task->task_id = i + 1;
+//#ifdef mpmctest
+//            //printf("enqueue ID %d\n", (i%workers));
+//            xtask_push(task, (i % workers));
+//#endif
+//#ifdef spsctest
+//            xtask_push(task);
+//#endif
+//        }
 #ifdef mpmctest
         start_workers();
 #endif

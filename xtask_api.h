@@ -13,7 +13,7 @@
 
 #define NUM_SAMPLES 8388608 //2^23
 #define QUEUE_SIZE NUM_SAMPLES   // Define maximum length of the queue
-#define NUM_CPUS 57
+#define NUM_CPUS 24
 #define INITQUEUES(size) InitBasicQueue(size)
 #define ENQUEUE(data) BasicEnqueue(data)
 #define DEQUEUE() BasicDequeue()
