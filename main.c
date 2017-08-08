@@ -134,6 +134,9 @@ FILE *rfp = fopen(fileName1, "a");
             xtask_push(task);
 #endif
         }
+#ifdef mpmctest
+        start_workers();
+#endif
 
         //    for (int i = 0; i < NUM_SAMPLES; i++) {
         //        xtask_poll(id, &params);

@@ -127,8 +127,8 @@ inline void* DequeueMultiple(struct theQueue *q, int queueID)
     int cur_head = __sync_add_and_fetch(&q->head,1);
 
     volatile struct task_desc *target = q->data[cur_head % QUEUE_SIZE];
-//    while (!target)
-//    {}
+    while (!target)
+    {}
     *elem = *target;
 
 #ifdef VERBOSE

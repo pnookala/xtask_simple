@@ -24,9 +24,11 @@ struct task_desc *execute_task(struct task_desc *task) {
     if (task) {
         switch (task->task_type) {
             case 0:
+                
                 sleep(0);
                 break;
             case 1:
+                printf("executing nop\n");
                 __asm__ __volatile__("nop;");
                 break;
             default:
@@ -183,7 +185,12 @@ void xtask_setup(int queue_size, int workers) {
     mps->enqueuetimestamps = (ticks *) malloc(sizeof (ticks) * NUM_SAMPLES);
     mps->dequeuetimestamps = (ticks *) malloc(sizeof (ticks) * NUM_SAMPLES);
 
-    pthread_barrier_init(&mps->barrier, NULL, workers);
+    //printf("created threads\n");
+}
+
+void start_workers()
+{
+        pthread_barrier_init(&mps->barrier, NULL, WORKERS);
 
 //    for (int t = 0; t < numProducers; t++) {
 //        struct thread_local_data* data = malloc(sizeof (struct thread_local_data*));
@@ -192,14 +199,12 @@ void xtask_setup(int queue_size, int workers) {
 //        pthread_create(&mps->enqueue_threads[t], NULL, enqueuemultiple_handler, (void *) data);
 //    }
 
-    for (int t = 0; t < numConsumers; t++) {
+    for (int t = 0; t < WORKERS; t++) {
         struct thread_local_data* data = malloc(sizeof (struct thread_local_data*));
         data->mps = mps;
         data->cpuID = (t % WORKERS);
         pthread_create(&mps->worker_threads[t], NULL, workermultiple_handler, (void *) data);
     }
-
-    //printf("created threads\n");
 }
 
 void xtask_cleanup() {

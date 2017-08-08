@@ -73,6 +73,7 @@ void xtask_setup(int queue_size, int workers);
 void xtask_cleanup();
 
 void xtask_push(struct task_desc* task, int queueID);
+void start_workers();
 void xtask_poll(void* task);
 
 
