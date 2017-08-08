@@ -4,8 +4,11 @@
     <df root="." name="0">
       <in>basicqueue.c</in>
       <in>main.c</in>
+      <in>squeuemultiple.c</in>
       <in>worker.c</in>
+      <in>worker_mpmc.c</in>
       <in>xtask_api.c</in>
+      <in>xtask_mpmc_api.c</in>
     </df>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -42,6 +45,7 @@
             <preprocessorList>
               <Elem>LATENCY</Elem>
               <Elem>_GNU_SOURCE</Elem>
+              <Elem>spsctest</Elem>
             </preprocessorList>
           </cTool>
         </makeTool>
@@ -58,11 +62,23 @@
         <cTool flags="0">
         </cTool>
       </item>
+      <item path="squeuemultiple.c" ex="false" tool="0" flavor2="3">
+        <cTool flags="0">
+        </cTool>
+      </item>
       <item path="worker.c" ex="false" tool="0" flavor2="3">
         <cTool flags="0">
         </cTool>
       </item>
+      <item path="worker_mpmc.c" ex="false" tool="0" flavor2="3">
+        <cTool flags="0">
+        </cTool>
+      </item>
       <item path="xtask_api.c" ex="false" tool="0" flavor2="3">
+        <cTool flags="0">
+        </cTool>
+      </item>
+      <item path="xtask_mpmc_api.c" ex="false" tool="0" flavor2="3">
         <cTool flags="0">
         </cTool>
       </item>

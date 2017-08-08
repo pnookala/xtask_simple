@@ -13,7 +13,7 @@
 #include "xtask_api.h"
 #include "basicqueue.h"
 #include "worker.h"
-
+#ifdef spsctest
 void xtask_setup(int queue_size, int workers)
 {
 	int *kill_master = (int *) malloc(sizeof(int));
@@ -81,6 +81,8 @@ void xtask_poll(void *task)
 	//*params = task->params;
 	//*id = i;
 
-	/* cleanup task */
+	/*spsc cleanup task */
 	//free(task);
 }
+
+#endif

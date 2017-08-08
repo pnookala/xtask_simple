@@ -12,6 +12,7 @@
 #include <string.h>
 #include "worker.h"
 
+#ifdef spsctest
 struct task_desc *execute_task(struct task_desc *task) {
     if(task)
     {
@@ -90,5 +91,7 @@ void *worker_handler(void *data) {
 
     return NULL;
 }
+
+#endif
 
 

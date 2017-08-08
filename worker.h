@@ -14,11 +14,13 @@
 #include <pthread.h>
 #include <sched.h>
 #include "basicqueue.h"
+#include "squeuemultiple.h"
 
-#define NUM_SAMPLES 8388608 //2^23
+#ifdef spsctest
+#define NUM_SAMPLES 16//262144//8388608 //2^23
 #define QUEUE_SIZE NUM_SAMPLES   // Define maximum length of the queue
 #define WORKERS 1
-#define NUM_CPUS 24
+#define NUM_CPUS 2
 #define QUEUE_TYPE 3
 
 #define INITQUEUES(size) InitBasicQueue(size)
@@ -91,5 +93,5 @@ static __inline__ ticks getticks(void) {
 
 struct task_desc *execute_task(struct task_desc *task);
 void *worker_handler(void *data);
-
+#endif
 #endif /* WORKER_H_ */

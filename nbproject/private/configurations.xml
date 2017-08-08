@@ -5,10 +5,16 @@
       <in>basicqueue.c</in>
       <in>basicqueue.h</in>
       <in>main.c</in>
+      <in>squeuemultiple.c</in>
+      <in>squeuemultiple.h</in>
       <in>worker.c</in>
       <in>worker.h</in>
+      <in>worker_mpmc.c</in>
+      <in>worker_mpmc.h</in>
       <in>xtask_api.c</in>
       <in>xtask_api.h</in>
+      <in>xtask_mpmc_api.c</in>
+      <in>xtask_mpmc_api.h</in>
     </df>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
@@ -36,6 +42,8 @@
         <gdb_interceptlist>
           <gdbinterceptoptions gdb_all="false" gdb_unhandled="true" gdb_unexpected="true"/>
         </gdb_interceptlist>
+        <gdb_signals>
+        </gdb_signals>
         <gdb_options>
           <DebugOptions>
           </DebugOptions>
