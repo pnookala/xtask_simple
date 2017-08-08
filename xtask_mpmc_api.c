@@ -86,7 +86,7 @@ void *workermultiple_handler(void * data) {
     memcpy(mps->dequeuetimestamps + mps->totaldequeuesamples, dequeuetimestamp, NUM_SAMPLES_PER_THREAD * sizeof (ticks));
     mps->totaldequeuesamples += NUM_SAMPLES_PER_THREAD;
     pthread_mutex_unlock(&lock);
-    //free(dequeuetimestamp);
+    free(dequeuetimestamp);
 #endif
 #ifdef THROUGHPUT
     clock_gettime(CLOCK_MONOTONIC, &tend);
@@ -152,7 +152,7 @@ void *workermultiple_handler(void * data) {
     mps->totalenqueuesamples += NUM_SAMPLES_PER_THREAD;
     pthread_mutex_unlock(&lock);
     
-    //free(enqueuetimestamp);
+    free(enqueuetimestamp);
 #endif
 #ifdef THROUGHPUT
     clock_gettime(CLOCK_MONOTONIC, &tend);
@@ -194,12 +194,12 @@ void start_workers()
 {
         pthread_barrier_init(&mps->barrier, NULL, WORKERS);
 
-    for (int t = 0; t < WORKERS; t++) {
-        struct thread_local_data* data = malloc(sizeof (struct thread_local_data*));
-        data->mps = mps;
-        data->cpuID = (t % WORKERS);
-        pthread_create(&mps->enqueue_threads[t], NULL, enqueuemultiple_handler, (void *) data);
-    }
+//    for (int t = 0; t < numProducers; t++) {
+//        struct thread_local_data* data = malloc(sizeof (struct thread_local_data*));
+//        data->mps = mps;
+//        data->cpuID = (t % NUM_QUEUES);
+//        pthread_create(&mps->enqueue_threads[t], NULL, enqueuemultiple_handler, (void *) data);
+//    }
 
     for (int t = 0; t < WORKERS; t++) {
         struct thread_local_data* data = malloc(sizeof (struct thread_local_data*));
@@ -222,10 +222,10 @@ void xtask_cleanup() {
     //dispose_queue(mps->incoming);
     //dispose_queue(mps->results);
 
-//    free(mps->enqueue_threads);
-//    free(mps->worker_threads);
-//    free(mps->kill_master);
-//    free(mps);
+    free(mps->worker_threads);
+    free(mps->enqueue_threads);
+    free(mps->kill_master);
+    free(mps);
 }
 
 unsigned int rand_interval(unsigned int min, unsigned int max) {
