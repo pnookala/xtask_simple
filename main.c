@@ -127,7 +127,8 @@ FILE *rfp = fopen(fileName1, "a");
             task->task_type = 1;
             task->task_id = i + 1;
 #ifdef mpmctest
-            xtask_push(task, (i % (workers)));
+            //printf("enqueue ID %d\n", (i%workers));
+            xtask_push(task, (i % workers));
 #endif
 #ifdef spsctest
             xtask_push(task);
