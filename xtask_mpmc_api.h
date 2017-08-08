@@ -18,8 +18,56 @@
 extern "C" {
 #endif
 
-#include "worker_mpmc.h"
+#include "squeuemultiple.h"
 #ifdef mpmctest
+static int WORKERS = 0;
+
+#define NUM_SAMPLES 16//262144//8388608 //2^23
+//#define QUEUE_SIZE NUM_SAMPLES   // Define maximum length of the queue
+#define NUM_CPUS 2
+
+//#define INITQUEUES(size) InitBasicQueue(size)
+//#define ENQUEUE(data) BasicEnqueue(data)
+//#define DEQUEUE() BasicDequeue()
+//#define ENQUEUE_RESULT(data) BasicEnqueue_rq(data)
+//#define DEQUEUE_RESULT() BasicDequeue_rq()
+
+#define INITQUEUES(size, numQueues) InitQueues(size, numQueues)
+#define ENQUEUE(elem, queue, queueID) EnqueueMultiple(elem, queue, queueID)
+#define DEQUEUE(q, queueID) DequeueMultiple(q, queueID)
+//#define ENQUEUE_RESULT(data) BasicEnqueue_rq(data)
+//#define DEQUEUE_RESULT() BasicDequeue_rq()
+
+#ifdef PHI
+
+//get number of ticks, could be problematic on modern CPUs with out of order execution
+
+static __inline__ ticks getticks(void) {
+    ticks tsc;
+    __asm__ __volatile__(
+            "rdtsc;"
+            "shl $32, %%rdx;"
+            "or %%rdx, %%rax"
+            : "=a"(tsc)
+            :
+            : "%rcx", "%rdx");
+
+    return tsc;
+}
+#else
+static __inline__ ticks getticks(void) {
+    ticks tsc;
+    __asm__ __volatile__(
+            "rdtscp;"
+            "shl $32, %%rdx;"
+            "or %%rdx, %%rax"
+            : "=a"(tsc)
+            :
+            : "%rcx", "%rdx");
+
+    return tsc;
+}
+#endif
 struct mproc_state *mps;
 
 void xtask_setup(int queue_size, int workers);

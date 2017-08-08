@@ -1,0 +1,6 @@
+QueueType NumSamples EnqueueThroughput DequeueThroughput NumThreads
+4 16 0.000000 578913.090672 0
+QueueType NumSamples EnqueueThroughput DequeueThroughput NumThreads
+4 16 0.000000 1035397.657413 0
+QueueType NumSamples Throughput NumThreads
+4 16 399281.293671 0

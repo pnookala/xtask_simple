@@ -11,6 +11,38 @@
 #include <stdio.h>
 #include "worker_mpmc.h"
 #ifdef mpmctest
+
+typedef long unsigned int ticks;
+
+struct task_desc {
+	int task_id;
+	int task_type;
+	int num_threads;
+	void *params;
+};
+
+struct mproc_state {
+	pthread_t *worker_threads;
+        pthread_t *enqueue_threads;
+	int *kill_master;
+	int workers;
+	pthread_barrier_t barrier;
+	cpu_set_t cpuset;
+        //For benchmarking purposes
+        double dequeuethroughput;
+        double enqueuethroughput;
+        ticks *dequeuetimestamps;
+        ticks *enqueuetimestamps;
+        long int totalenqueuesamples;
+        long int totaldequeuesamples;
+};
+
+struct thread_local_data
+{
+    struct mproc_state* mps;
+    int cpuID;
+};
+
 struct theQueue
 {
 	int head;
