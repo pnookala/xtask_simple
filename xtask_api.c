@@ -18,6 +18,7 @@
 //#include "worker.h"
 #ifdef spsctest
 
+static int WORKERS = 0;
 #ifdef PHI
 
 //get number of ticks, could be problematic on modern CPUs with out of order execution
@@ -80,7 +81,7 @@ void *worker_handler(void *data) {
     CPU_SET(cpuID, &set);
 
     pthread_setaffinity_np(pthread_self(), sizeof (set), &set);
-    printf("Thread on CPU %d\n", sched_getcpu());
+    //printf("Thread on CPU %d\n", sched_getcpu());
     
     int NUM_SAMPLES_PER_THREAD = (NUM_SAMPLES / WORKERS);
 #ifdef LATENCY
@@ -120,7 +121,7 @@ void *worker_handler(void *data) {
     clock_gettime(CLOCK_MONOTONIC, &tend);
     pthread_mutex_lock(&lock);
     double elapsed = (tend.tv_sec - tstart.tv_sec) + ((tend.tv_nsec - tstart.tv_nsec) / 1E9);
-    printf("elapsed time: %lf\n", elapsed);
+    //printf("elapsed time: %lf\n", elapsed);
     mps->throughput += ((NUM_SAMPLES_PER_THREAD * 1.0) / elapsed);
     pthread_mutex_unlock(&lock);
 #endif

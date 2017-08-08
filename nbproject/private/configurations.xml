@@ -57,8 +57,11 @@
         <runcommandpicklist>
           <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" 4 1 rawfile</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" 4 2 rawfile</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" 4 32 rawfile</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" 4 64 rawfile</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}" 4 1 rawfile</runcommand>
+        <runcommand>"${OUTPUT_PATH}" 4 64 rawfile</runcommand>
         <rundir>.</rundir>
         <buildfirst>false</buildfirst>
         <terminal-type>0</terminal-type>

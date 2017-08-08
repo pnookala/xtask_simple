@@ -17,6 +17,7 @@
 //#include "worker_mpmc.h"
 
 #ifdef mpmctest
+static int WORKERS = 0;
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 
 struct task_desc *execute_task(struct task_desc *task) {
@@ -48,7 +49,7 @@ void *workermultiple_handler(void * data) {
     CPU_SET(cpuID, &set);
 
     pthread_setaffinity_np(pthread_self(), sizeof (set), &set);
-    printf("Thread on CPU %d\n", sched_getcpu());
+    //printf("Thread on CPU %d\n", sched_getcpu());
     int NUM_SAMPLES_PER_THREAD = (NUM_SAMPLES / WORKERS);
     
 #ifdef LATENCY
@@ -89,7 +90,7 @@ void *workermultiple_handler(void * data) {
     clock_gettime(CLOCK_MONOTONIC, &tend);
     pthread_mutex_lock(&lock);
     double elapsed = (tend.tv_sec - tstart.tv_sec) + ((tend.tv_nsec - tstart.tv_nsec) / 1E9);
-    printf("elapsed time: %lf\n", elapsed);
+    //printf("elapsed time: %lf\n", elapsed);
     mps->dequeuethroughput += ((NUM_SAMPLES_PER_THREAD * 1.0) / elapsed);
     pthread_mutex_unlock(&lock);
 #endif
@@ -108,7 +109,7 @@ void *workermultiple_handler(void * data) {
     CPU_SET(cpuID, &set);
 
     pthread_setaffinity_np(pthread_self(), sizeof (set), &set);
-    printf("Thread on CPU %d\n", sched_getcpu());
+    //printf("Thread on CPU %d\n", sched_getcpu());
     
     int NUM_SAMPLES_PER_THREAD = (NUM_SAMPLES / WORKERS);
     
@@ -153,7 +154,7 @@ void *workermultiple_handler(void * data) {
     clock_gettime(CLOCK_MONOTONIC, &tend);
     pthread_mutex_lock(&lock);
     double elapsed = (tend.tv_sec - tstart.tv_sec) + ((tend.tv_nsec - tstart.tv_nsec) / 1E9);
-    printf("elapsed time: %lf\n", elapsed);
+    //printf("elapsed time: %lf\n", elapsed);
     mps->enqueuethroughput += ((NUM_SAMPLES_PER_THREAD * 1.0) / elapsed);
     pthread_mutex_unlock(&lock);
 #endif

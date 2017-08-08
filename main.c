@@ -102,8 +102,21 @@ int main(int argc, char **argv) {
         printf("Thread list count: %d\n", threadCount);
         printf("Output files: %s\n", fileName1);
     }
+    
+    #ifdef LATENCY  
+FILE *rfp = fopen(fileName1, "a");
+        //fprintf(rfp, "QueueType NumSamples AverageDequeueCycles MinDequeueCycles MaxDequeueCycles NumThreads\n");
+#endif
+#ifdef RAW
+        fprintf(rfp, "QueueType NumSamples Cycles NumThreads\n");
+#endif
+#ifdef THROUGHPUT
+        FILE *rfp = fopen(fileName1, "a");
+        //fprintf(rfp, "QueueType NumSamples Throughput NumThreads\n");
+#endif 
 
-    for (int k = 0; k < threadCount; k++) {
+    for (int k = 0; k < threadCount; k++) 
+    {
         int workers = 0;
         workers = threads[k];
 
@@ -129,75 +142,67 @@ int main(int argc, char **argv) {
         xtask_cleanup();
 
 #ifdef LATENCY
-        FILE *rfp = fopen(fileName1, "a");
+        
 #ifdef mpmctest
-        SortTicks(mps->enqueuetimestamps, NUM_SAMPLES);
-        SortTicks(mps->dequeuetimestamps, NUM_SAMPLES);
+        SortTicks(mps->enqueuetimestamps, mps->totalenqueuesamples);
+        SortTicks(mps->dequeuetimestamps, mps->totaldequeuesamples);
 #endif
 #ifdef spsctest
         SortTicks(mps->timestamps, NUM_SAMPLES);
-#endif
-#endif
-#ifdef THROUGHPUT
-        FILE *rfp = fopen("ThroughputResults", "a");
-#endif 
-#ifdef LATENCY
-        fprintf(rfp, "QueueType NumSamples AverageEnqueueCycles MinEnqueueCycles MaxEnqueueCycles AverageDequeueCycles MinDequeueCycles MaxDequeueCycles NumThreads\n");
-#ifdef RAW
-        fprintf(rfp, "QueueType NumSamples Cycles NumThreads\n");
 #endif
 #endif
         //printf("QueueType NumSamples AverageEnqueueCycles MinEnqueueCycles MaxEnqueueCycles AverageDequeueCycles MinDequeueCycles MaxDequeueCycles NumThreads\n");
 #ifdef LATENCY
 #ifdef spsctest
         ticks totalTicks = 0;
-        for (int i = 0; i < NUM_SAMPLES; i++) {
+        for (int i = 0; i < mps->totalsamples; i++) {
+            printf("numsamples %ld i %d\n", mps->totalsamples, i);
             totalTicks += mps->timestamps[i];
         }
 
         ticks tickMin = mps->timestamps[0];
-        ticks tickMax = mps->timestamps[NUM_SAMPLES - 1];
+        ticks tickMax = mps->timestamps[mps->totalsamples - 1];
 
         //compute average
-        double tickAverage = (totalTicks / NUM_SAMPLES);
+        double tickAverage = (totalTicks / mps->totalsamples);
 
-        fprintf(rfp, "%d %d %lf %ld %ld %d \n", QUEUE_TYPE, NUM_SAMPLES, tickAverage, tickMin, tickMax, WORKERS);
-        printf("%d %d %lf %ld %ld %d \n", QUEUE_TYPE, NUM_SAMPLES, tickAverage, tickMin, tickMax, WORKERS);
+        fprintf(rfp, "%d %ld %lf %ld %ld %d \n", QUEUE_TYPE, mps->totalsamples, tickAverage, tickMin, tickMax, workers);
+        printf("%d %ld %lf %ld %ld %d \n", QUEUE_TYPE, mps->totalsamples, tickAverage, tickMin, tickMax, workers);
 #ifdef RAW
         int i = 0;
         while (i < NUM_SAMPLES) {
-            fprintf(rfp, "%d %d %ld %d\n", QUEUE_TYPE, NUM_SAMPLES, mps->timestamps[i], WORKERS);
+            fprintf(rfp, "%d %ld %ld %d\n", QUEUE_TYPE, mps->totalsamples, mps->timestamps[i], workers);
 #ifdef VERBOSE
-            printf("%d %d %ld %d\n", QUEUE_TYPE, NUM_SAMPLES, mps->timestamps[i], WORKERS);
+            printf("%d %ld %ld %d\n", QUEUE_TYPE, mps->totalsamples, mps->timestamps[i], workers);
 #endif
             i++;
         }
 #endif
 #endif
 #ifdef mpmctest
-        ticks totalEnqueueTicks = 0, totalDequeueTicks = 0;
-        for (int i = 0; i < NUM_SAMPLES; i++) {
-            totalEnqueueTicks += mps->enqueuetimestamps[i];
+        ticks totalDequeueTicks = 0;
+        for (int i = 0; i < mps->totaldequeuesamples; i++) {
+            //totalEnqueueTicks += mps->enqueuetimestamps[i];
             totalDequeueTicks += mps->dequeuetimestamps[i];
         }
 
-        ticks tickEnqueueMin = mps->enqueuetimestamps[0];
-        ticks tickEnqueueMax = mps->enqueuetimestamps[NUM_SAMPLES - 1];
+        //ticks tickEnqueueMin = mps->enqueuetimestamps[0];
+        //ticks tickEnqueueMax = mps->enqueuetimestamps[NUM_SAMPLES - 1];
         ticks tickDequeueMin = mps->dequeuetimestamps[0];
-        ticks tickDequeueMax = mps->dequeuetimestamps[NUM_SAMPLES - 1];
+        ticks tickDequeueMax = mps->dequeuetimestamps[mps->totaldequeuesamples - 1];
 
         //compute average
-        double tickEnqueueAverage = (totalEnqueueTicks / NUM_SAMPLES);
-        double tickDequeueAverage = (totalDequeueTicks / NUM_SAMPLES);
+        //double tickEnqueueAverage = (totalEnqueueTicks / NUM_SAMPLES);
+        double tickDequeueAverage = (totalDequeueTicks / mps->totaldequeuesamples);
 
-        fprintf(rfp, "%d %d %lf %ld %ld %lf %ld %ld %d \n", QUEUE_TYPE, NUM_SAMPLES, tickEnqueueAverage, tickEnqueueMin, tickEnqueueMax, tickDequeueAverage, tickDequeueMin, tickDequeueMax, WORKERS);
-        printf("%d %d %lf %ld %ld %lf %ld %ld %d \n", QUEUE_TYPE, NUM_SAMPLES, tickEnqueueAverage, tickEnqueueMin, tickEnqueueMax, tickDequeueAverage, tickDequeueMin, tickDequeueMax, WORKERS);
+        fprintf(rfp, "%d %ld %lf %ld %ld %d \n", QUEUE_TYPE, mps->totaldequeuesamples, tickDequeueAverage, tickDequeueMin, tickDequeueMax, workers);
+        printf("%d %ld %lf %ld %ld %d \n", QUEUE_TYPE, mps->totaldequeuesamples, tickDequeueAverage, tickDequeueMin, tickDequeueMax, workers);
 #ifdef RAW
         int i = 0;
         while (i < NUM_SAMPLES) {
-            fprintf(rfp, "%d %d %ld %ld %d\n", QUEUE_TYPE, NUM_SAMPLES, mps->enqueuetimestamps[i], mps->dequeuetimestamps[i], WORKERS);
+            fprintf(rfp, "%d %ld %ld %d\n", QUEUE_TYPE, mps->totaldequeuesamples, mps->dequeuetimestamps[i], workers);
 #ifdef VERBOSE
-            printf("%d %d %ld %ld %d\n", QUEUE_TYPE, NUM_SAMPLES, mps->enqueuetimestamps[i], mps->dequeuetimestamps[i], WORKERS);
+            printf("%d %ld %ld %d\n", QUEUE_TYPE, mps->totaldequeuesamples,  mps->dequeuetimestamps[i], workers);
 #endif
             i++;
         }
@@ -207,14 +212,12 @@ int main(int argc, char **argv) {
 
 #ifdef THROUGHPUT
 #ifdef spsctest
-        fprintf(rfp, "QueueType NumSamples Throughput NumThreads\n");
-        fprintf(rfp, "%d %d %lf %d\n", QUEUE_TYPE, NUM_SAMPLES, mps->throughput, WORKERS);
-        printf("%d %d %lf %d\n", QUEUE_TYPE, NUM_SAMPLES, mps->throughput, WORKERS);
+        fprintf(rfp, "%d %ld %lf %d\n", QUEUE_TYPE, mps->totalsamples, mps->throughput, workers);
+        printf("%d %ld %lf %d\n", QUEUE_TYPE, mps->totalsamples, mps->throughput, workers);
 #endif
 #ifdef mpmctest
-        fprintf(rfp, "QueueType NumSamples EnqueueThroughput DequeueThroughput NumThreads\n");
-        fprintf(rfp, "%d %d %lf %lf %d\n", QUEUE_TYPE, NUM_SAMPLES, mps->enqueuethroughput, mps->dequeuethroughput, WORKERS);
-        printf("%d %d %lf %lf %d\n", QUEUE_TYPE, NUM_SAMPLES, mps->enqueuethroughput, mps->dequeuethroughput, WORKERS);
+        fprintf(rfp, "%d %ld %lf %d\n", QUEUE_TYPE, mps->totaldequeuesamples, mps->dequeuethroughput, workers);
+        printf("%d %ld %lf %d\n", QUEUE_TYPE, mps->totaldequeuesamples, mps->dequeuethroughput, workers);
 #endif
 #endif
     }

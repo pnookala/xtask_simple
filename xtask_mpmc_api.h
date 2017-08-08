@@ -20,9 +20,8 @@ extern "C" {
 
 #include "squeuemultiple.h"
 #ifdef mpmctest
-static int WORKERS = 0;
 
-#define NUM_SAMPLES 16//262144//8388608 //2^23
+#define NUM_SAMPLES 262144//8388608 //2^23
 //#define QUEUE_SIZE NUM_SAMPLES   // Define maximum length of the queue
 #define NUM_CPUS 2
 
