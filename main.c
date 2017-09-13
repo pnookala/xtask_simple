@@ -147,7 +147,7 @@ int main(int argc, char **argv) {
 #ifdef LATENCY
 
 #ifdef mpmctest
-        SortTicks(mps->enqueuetimestamps, mps->totalenqueuesamples);
+        //SortTicks(mps->enqueuetimestamps, mps->totalenqueuesamples);
         SortTicks(mps->dequeuetimestamps, mps->totaldequeuesamples);
 #endif
 #ifdef spsctest
@@ -176,7 +176,7 @@ int main(int argc, char **argv) {
             tickMedian = mps->timestamps[(mps->totalsamples / 2)];
         }
         //compute average
-        double tickAverage = (totalTicks / mps->totalsamples);
+        double tickAverage = (totalTicks *1.0 / mps->totalsamples);
 
         fprintf(rfp, "%d %ld %lf %ld %ld %ld %d \n", QUEUE_TYPE, mps->totalsamples, tickAverage, tickMin, tickMax, tickMedian, workers);
         printf("%d %ld %lf %ld %ld %ld %d \n", QUEUE_TYPE, mps->totalsamples, tickAverage, tickMin, tickMax, tickMedian, workers);

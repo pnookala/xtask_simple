@@ -24,7 +24,6 @@ struct task_desc *execute_task(struct task_desc *task) {
     if (task) {
         switch (task->task_type) {
             case 0:
-                
                 sleep(0);
                 break;
             case 1:
@@ -34,7 +33,6 @@ struct task_desc *execute_task(struct task_desc *task) {
                 break;
         }
     }
-    sleep(0);
 
     return 0;
 }
