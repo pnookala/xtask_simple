@@ -107,13 +107,13 @@ int main(int argc, char **argv) {
     FILE *rfp = fopen(fileName1, "a");
     //fprintf(rfp, "QueueType NumSamples AverageDequeueCycles MinDequeueCycles MaxDequeueCycles NumThreads\n");
 #endif
-#ifdef RAW
-    fprintf(rfp, "QueueType NumSamples Cycles NumThreads\n");
-#endif
 #ifdef THROUGHPUT
     FILE *rfp = fopen(fileName1, "a");
     //fprintf(rfp, "QueueType NumSamples Throughput NumThreads\n");
 #endif 
+#ifdef RAW
+    fprintf(rfp, "QueueType NumSamples Cycles NumThreads\n");
+#endif
 
     for (int k = 0; k < threadCount; k++) {
         int workers = 0;
@@ -215,7 +215,7 @@ int main(int argc, char **argv) {
 
         //compute average
         //double tickEnqueueAverage = (totalEnqueueTicks / NUM_SAMPLES);
-        double tickDequeueAverage = (totalDequeueTicks / mps->totaldequeuesamples);
+        double tickDequeueAverage = (totalDequeueTicks * 1.0 / mps->totaldequeuesamples);
 
         fprintf(rfp, "%d %ld %lf %ld %ld %ld %d \n", QUEUE_TYPE, mps->totaldequeuesamples, tickDequeueAverage, tickDequeueMin, tickDequeueMax, tickMedian, workers);
         printf("%d %ld %lf %ld %ld %ld %d \n", QUEUE_TYPE, mps->totaldequeuesamples, tickDequeueAverage, tickDequeueMin, tickDequeueMax, tickMedian, workers);

@@ -10,17 +10,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/pnookala/workspacecpp/xtask_simple/squeuemultiple.c</file>
-            <file>file:/home/pnookala/workspacecpp/xtask_simple/worker_mpmc.c</file>
-            <file>file:/home/pnookala/workspacecpp/xtask_simple/Makefile</file>
-            <file>file:/home/pnookala/workspacecpp/xtask_simple/xtask_api.h</file>
-            <file>file:/home/pnookala/workspacecpp/xtask_simple/worker.h</file>
-            <file>file:/home/pnookala/workspacecpp/xtask_simple/xtask_mpmc_api.c</file>
-            <file>file:/home/pnookala/workspacecpp/xtask_simple/worker.c</file>
-            <file>file:/home/pnookala/workspacecpp/xtask_simple/main.c</file>
+            <file>file:/home/pnookala/workspacecpp/xtask_simple/AllTests.sh</file>
             <file>file:/home/pnookala/workspacecpp/xtask_simple/xtask_api.c</file>
+            <file>file:/home/pnookala/workspacecpp/xtask_simple/AllPhiTests.sh</file>
+            <file>file:/home/pnookala/workspacecpp/xtask_simple/basicqueue.c</file>
+            <file>file:/home/pnookala/workspacecpp/xtask_simple/worker.h</file>
+            <file>file:/home/pnookala/workspacecpp/xtask_simple/basicqueue.h</file>
+            <file>file:/home/pnookala/workspacecpp/xtask_simple/Makefile</file>
             <file>file:/home/pnookala/workspacecpp/xtask_simple/worker_mpmc.h</file>
-            <file>file:/home/pnookala/workspacecpp/xtask_simple/squeuemultiple.h</file>
+            <file>file:/home/pnookala/workspacecpp/xtask_simple/squeuemultiple.c</file>
+            <file>file:/home/pnookala/workspacecpp/xtask_simple/xtask_api.h</file>
+            <file>file:/home/pnookala/workspacecpp/xtask_simple/main.c</file>
+            <file>file:/home/pnookala/workspacecpp/xtask_simple/xtask_mpmc_api.h</file>
+            <file>file:/home/pnookala/workspacecpp/xtask_simple/xtask_mpmc_api.c</file>
         </group>
     </open-files>
 </project-private>
