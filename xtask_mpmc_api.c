@@ -109,7 +109,7 @@ void *workermultiple_handler(void * data) {
     CPU_SET(cpuID, &set);
 
     pthread_setaffinity_np(pthread_self(), sizeof (set), &set);
-    printf("Thread on CPU %d\n", sched_getcpu());
+    //printf("Thread on CPU %d\n", sched_getcpu());
     
     int NUM_SAMPLES_PER_THREAD = (NUM_SAMPLES / WORKERS);
     
