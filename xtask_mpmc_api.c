@@ -48,7 +48,7 @@ void *workermultiple_handler(void * data) {
     CPU_SET(cpuID, &set);
 
     pthread_setaffinity_np(pthread_self(), sizeof (set), &set);
-    //printf("Thread on CPU %d\n", sched_getcpu());
+    printf("Dequeue Thread on CPU %d\n", sched_getcpu());
     int NUM_SAMPLES_PER_THREAD = (NUM_SAMPLES / WORKERS);
     
 #ifdef LATENCY
@@ -72,8 +72,8 @@ void *workermultiple_handler(void * data) {
         start_tick = getticks();
 #endif
         task = DEQUEUE(queues[cpuID], cpuID);
-        execute_task(task);
-        ENQUEUE(task, resultQueue, 0);
+        //execute_task(task);
+        //ENQUEUE(task, resultQueue, 0);
 #ifdef LATENCY
         end_tick = getticks();
         dequeuetimestamp[count] = end_tick - start_tick;
@@ -109,7 +109,7 @@ void *workermultiple_handler(void * data) {
     CPU_SET(cpuID, &set);
 
     pthread_setaffinity_np(pthread_self(), sizeof (set), &set);
-    //printf("Thread on CPU %d\n", sched_getcpu());
+    printf("Enqueue Thread on CPU %d\n", sched_getcpu());
     
     int NUM_SAMPLES_PER_THREAD = (NUM_SAMPLES / WORKERS);
     
@@ -132,7 +132,7 @@ void *workermultiple_handler(void * data) {
     for (int count = 0; count < NUM_SAMPLES_PER_THREAD; count++) {
 
         struct task_desc* task = (struct task_desc*)malloc(sizeof(struct task_desc));
-        task->task_type = 1;
+        task->task_type = 0;
         task->task_id = count+1;
  #ifdef LATENCY       
         start_tick = getticks();

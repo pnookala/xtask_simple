@@ -123,7 +123,7 @@ inline void* DequeueMultiple(struct theQueue *q, int queueID)
 #endif
 		return NULL;
         }
-	 struct task_desc* elem = malloc(sizeof(struct task_desc));
+	 //struct task_desc* elem = malloc(sizeof(struct task_desc));
     int cur_head = __sync_add_and_fetch(&q->head,1);
 
    volatile struct task_desc *target = (struct task_desc*) (q->data + (cur_head % QUEUE_SIZE));
@@ -131,12 +131,12 @@ inline void* DequeueMultiple(struct theQueue *q, int queueID)
     {
 
     }
-   	*elem = *target;
+   	//*elem = *target;
 
 #ifdef VERBOSE
     printf("QueueID: %d, Dequeue: %d\n", queueID, ((elem))->task_id);
 #endif
-    return elem;
+    return target;//elem;
     
 }
 
