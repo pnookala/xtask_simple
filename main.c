@@ -121,18 +121,18 @@ int main(int argc, char **argv) {
 
         xtask_setup(NUM_SAMPLES, workers);
 
-        for (int i = 0; i < NUM_SAMPLES; i++) {
-            struct task_desc* task = (struct task_desc*) malloc(sizeof (struct task_desc));
-            task->task_type = 1;
-            task->task_id = i + 1;
-#ifdef mpmctest
-            //printf("enqueue ID %d\n", (i%workers));
-            xtask_push(task, (i % workers));
-#endif
-#ifdef spsctest
-            xtask_push(task);
-#endif
-        }
+//        for (int i = 0; i < NUM_SAMPLES; i++) {
+//            struct task_desc* task = (struct task_desc*) malloc(sizeof (struct task_desc));
+//            task->task_type = 1;
+//            task->task_id = i + 1;
+//#ifdef mpmctest
+//            //printf("enqueue ID %d\n", (i%workers));
+//            xtask_push(task, (i % workers));
+//#endif
+//#ifdef spsctest
+//            xtask_push(task);
+//#endif
+//        }
 #ifdef mpmctest
         start_workers();
 #endif
@@ -147,7 +147,7 @@ int main(int argc, char **argv) {
 #ifdef LATENCY
 
 #ifdef mpmctest
-        //SortTicks(mps->enqueuetimestamps, mps->totalenqueuesamples);
+        SortTicks(mps->enqueuetimestamps, mps->totalenqueuesamples);
         SortTicks(mps->dequeuetimestamps, mps->totaldequeuesamples);
 #endif
 #ifdef spsctest
@@ -192,14 +192,14 @@ int main(int argc, char **argv) {
 #endif
 #endif
 #ifdef mpmctest
-        ticks totalDequeueTicks = 0;
+        ticks totalDequeueTicks = 0, totalEnqueueTicks = 0;
         for (int i = 0; i < mps->totaldequeuesamples; i++) {
-            //totalEnqueueTicks += mps->enqueuetimestamps[i];
+            totalEnqueueTicks += mps->enqueuetimestamps[i];
             totalDequeueTicks += mps->dequeuetimestamps[i];
         }
 
-        //ticks tickEnqueueMin = mps->enqueuetimestamps[0];
-        //ticks tickEnqueueMax = mps->enqueuetimestamps[NUM_SAMPLES - 1];
+        ticks tickEnqueueMin = mps->enqueuetimestamps[0];
+        ticks tickEnqueueMax = mps->enqueuetimestamps[mps->totalenqueuesamples - 1];
         ticks tickDequeueMin = mps->dequeuetimestamps[0];
         ticks tickDequeueMax = mps->dequeuetimestamps[mps->totaldequeuesamples - 1];
 
@@ -216,9 +216,10 @@ int main(int argc, char **argv) {
         //compute average
         //double tickEnqueueAverage = (totalEnqueueTicks / NUM_SAMPLES);
         double tickDequeueAverage = (totalDequeueTicks * 1.0 / mps->totaldequeuesamples);
+        double tickEnqueueAverage = (totalEnqueueTicks * 1.0 / mps->totalenqueuesamples);
 
-        fprintf(rfp, "%d %ld %lf %ld %ld %ld %d \n", QUEUE_TYPE, mps->totaldequeuesamples, tickDequeueAverage, tickDequeueMin, tickDequeueMax, tickMedian, workers);
-        printf("%d %ld %lf %ld %ld %ld %d \n", QUEUE_TYPE, mps->totaldequeuesamples, tickDequeueAverage, tickDequeueMin, tickDequeueMax, tickMedian, workers);
+        fprintf(rfp, "%d %ld %lf %lf %ld %ld %ld %d \n", QUEUE_TYPE, mps->totaldequeuesamples, tickDequeueAverage, tickEnqueueAverage, tickDequeueMin, tickDequeueMax, tickMedian, workers);
+        printf("%d %ld %lf %lf %ld %ld %ld %d \n", QUEUE_TYPE, mps->totaldequeuesamples, tickDequeueAverage, tickEnqueueAverage, tickDequeueMin, tickDequeueMax, tickMedian, workers);
 #ifdef RAW
         int i = 0;
         while (i < NUM_SAMPLES) {

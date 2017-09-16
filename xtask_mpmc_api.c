@@ -172,7 +172,7 @@ void xtask_setup(int queue_size, int workers) {
     
     WORKERS = workers;
 
-    int numProducers = 1;//workers / 2;
+    int numProducers = workers;//workers / 2;
     int numConsumers = workers;
 
     INITQUEUES(queue_size, workers);
@@ -192,12 +192,12 @@ void start_workers()
 {
         pthread_barrier_init(&mps->barrier, NULL, WORKERS);
 
-//    for (int t = 0; t < numProducers; t++) {
-//        struct thread_local_data* data = malloc(sizeof (struct thread_local_data*));
-//        data->mps = mps;
-//        data->cpuID = (t % NUM_QUEUES);
-//        pthread_create(&mps->enqueue_threads[t], NULL, enqueuemultiple_handler, (void *) data);
-//    }
+    for (int t = 0; t < WORKERS; t++) {
+        struct thread_local_data* data = malloc(sizeof (struct thread_local_data*));
+        data->mps = mps;
+        data->cpuID = (t % WORKERS);
+        pthread_create(&mps->enqueue_threads[t], NULL, enqueuemultiple_handler, (void *) data);
+    }
 
     for (int t = 0; t < WORKERS; t++) {
         struct thread_local_data* data = malloc(sizeof (struct thread_local_data*));
@@ -213,7 +213,7 @@ void xtask_cleanup() {
     //*(mps->kill_master) = 1;
 
     for (int i = 0; i < mps->workers; i++) {
-        //pthread_join(mps->enqueue_threads[i], NULL);
+        pthread_join(mps->enqueue_threads[i], NULL);
         pthread_join(mps->worker_threads[i], NULL);
     }
 
@@ -223,7 +223,7 @@ void xtask_cleanup() {
     free(mps->worker_threads);
     free(mps->enqueue_threads);
     free(mps->kill_master);
-    free(mps);
+    //free(mps);
 }
 
 unsigned int rand_interval(unsigned int min, unsigned int max) {
